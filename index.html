@@ -3,585 +3,384 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MST Portfolio Optimizer - Academic Research Project</title>
+    <title>MST Portfolio Optimizer - Indian Stock Market</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-brand">MST Portfolio Optimizer</div>
-            <div class="nav-menu">
-                <a href="#title" class="nav-link active" data-section="title">Home</a>
-                <a href="#theory" class="nav-link" data-section="theory">Theory</a>
-                <a href="#methodology" class="nav-link" data-section="methodology">Methodology</a>
-                <a href="#visualization" class="nav-link" data-section="visualization">Network</a>
-                <a href="#results" class="nav-link" data-section="results">Results</a>
-                <a href="#implementation" class="nav-link" data-section="implementation">Algorithm</a>
-                <a href="#analysis" class="nav-link" data-section="analysis">Analysis</a>
-                <a href="#conclusion" class="nav-link" data-section="conclusion">Conclusion</a>
+            <div class="nav-links">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#network" class="nav-link">MST Network</a>
+                <a href="#centrality" class="nav-link">Centrality Analysis</a>
+                <a href="#portfolio" class="nav-link">Portfolio Comparison</a>
+                <a href="#methodology" class="nav-link">Methodology</a>
             </div>
         </div>
     </nav>
 
-    <main class="main-content">
-        <!-- Title Page -->
-        <section id="title" class="section active">
-            <div class="container">
-                <div class="title-header">
-                    <h1 class="main-title">Correlation Graph Portfolio Optimizer Using Minimum Spanning Trees</h1>
-                    <h2 class="subtitle">Advanced Data Structures & Algorithms in Finance</h2>
-                    <div class="author-info">
-                        <p>Academic Research Project</p>
-                        <p>Department of Computer Science & Finance</p>
+    <!-- Home Section -->
+    <section id="home" class="section active-section">
+        <div class="container">
+            <div class="hero">
+                <h1 class="hero-title">MST Portfolio Optimizer - Indian Stock Market</h1>
+                <h2 class="hero-subtitle">Build diversified portfolios using graph theory and network analysis</h2>
+                <p class="hero-description">
+                    Use advanced network science and graph theory to construct optimized portfolios from 25 top Indian stocks.
+                    Our MST-based approach analyzes stock correlations and centrality measures to identify
+                    diversification opportunities that traditional methods miss.
+                </p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">25</div>
+                        <div class="stat-label">Stocks Analyzed</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">13</div>
+                        <div class="stat-label">Sectors Covered</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">24</div>
+                        <div class="stat-label">Network Connections</div>
                     </div>
                 </div>
-                
-                <div class="overview-grid">
-                    <div class="overview-card">
-                        <h3>Objective</h3>
-                        <p>Develop an innovative portfolio optimization approach using MST algorithms to enhance traditional asset allocation methodologies through network theory principles.</p>
-                    </div>
-                    <div class="overview-card">
-                        <h3>Key Innovation</h3>
-                        <p>Transform complex correlation matrices into simplified tree structures for intuitive visualization and systematic diversification analysis.</p>
-                    </div>
-                    <div class="overview-card">
-                        <h3>Technical Approach</h3>
-                        <p>Implementation of Kruskal's and Prim's algorithms with Union-Find data structure for efficient MST construction and portfolio optimization.</p>
+                <button class="btn btn--primary btn--lg" onclick="navigateToNetwork()">Get Started</button>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card" style="background: var(--color-bg-1);">
+                    <div class="feature-icon">🌐</div>
+                    <h3>Interactive Network</h3>
+                    <p>Explore the MST connecting 25 Indian stocks. See correlations, centrality measures, and sector relationships in real-time.</p>
+                </div>
+                <div class="feature-card" style="background: var(--color-bg-2);">
+                    <div class="feature-icon">📊</div>
+                    <h3>Smart Allocation</h3>
+                    <p>Compare three scientifically-backed strategies: Inverse Centrality, MST Diversification, and Equal Weight portfolios.</p>
+                </div>
+                <div class="feature-card" style="background: var(--color-bg-3);">
+                    <div class="feature-icon">💰</div>
+                    <h3>Custom Investment</h3>
+                    <p>Input your investment amount and get personalized recommendations with exact share quantities for each stock.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MST Network Section -->
+    <section id="network" class="section">
+        <div class="container">
+            <h2 class="section-title">MST Network Visualization</h2>
+            <p class="section-description">
+                Interactive network graph showing the Minimum Spanning Tree connections between stocks.
+                Edges represent correlations, with thickness proportional to correlation strength.
+                Hover over nodes and edges for detailed information.
+            </p>
+
+            <div class="controls-panel">
+                <div class="control-group">
+                    <label class="control-label">Color by:</label>
+                    <select id="colorBy" class="form-control">
+                        <option value="sector">Sector</option>
+                        <option value="degree">Degree Centrality</option>
+                        <option value="betweenness">Betweenness Centrality</option>
+                        <option value="eigenvector">Eigenvector Centrality</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Filter by sector:</label>
+                    <select id="sectorFilter" class="form-control">
+                        <option value="all">All Sectors</option>
+                    </select>
+                </div>
+                <button class="btn btn--secondary btn--sm" onclick="resetNetworkView()">Reset View</button>
+            </div>
+
+            <div class="card">
+                <div class="card__body">
+                    <div id="network-graph" class="network-container"></div>
+                </div>
+            </div>
+
+            <div class="legend-container">
+                <div class="legend-section">
+                    <h4>Sector Legend</h4>
+                    <div id="sector-legend" class="legend-items"></div>
+                </div>
+                <div class="legend-section">
+                    <h4>Edge Thickness</h4>
+                    <p>Thickness is proportional to correlation strength (thicker = stronger correlation)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Centrality Analysis Section -->
+    <section id="centrality" class="section">
+        <div class="container">
+            <h2 class="section-title">Centrality Measures Analysis</h2>
+            <p class="section-description">
+                Analysis of three key centrality measures that identify systemically important stocks in the network.
+                Click on bars to highlight stocks across all metrics.
+            </p>
+
+            <div class="metrics-cards">
+                <div class="metric-card">
+                    <h4>Degree Centrality</h4>
+                    <p>Number of direct connections a stock has in the MST</p>
+                </div>
+                <div class="metric-card">
+                    <h4>Betweenness Centrality</h4>
+                    <p>Frequency a stock appears on shortest paths between other stocks</p>
+                </div>
+                <div class="metric-card">
+                    <h4>Eigenvector Centrality</h4>
+                    <p>Influence based on connections to other highly connected stocks</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card__body">
+                    <div class="chart-container">
+                        <canvas id="centralityChart"></canvas>
                     </div>
                 </div>
             </div>
-        </section>
 
-        <!-- Theoretical Foundation -->
-        <section id="theory" class="section">
-            <div class="container">
-                <h1>Theoretical Foundation</h1>
-                
-                <div class="theory-grid">
-                    <div class="theory-card">
-                        <h3>Graph Theory in Finance</h3>
-                        <p>Asset correlations are represented as weighted edges in an undirected graph, where:</p>
-                        <ul>
-                            <li>Vertices (V) represent individual securities</li>
-                            <li>Edges (E) represent correlation relationships</li>
-                            <li>Edge weights correspond to transformed correlation coefficients</li>
-                        </ul>
-                        <div class="formula">
-                            <strong>Distance Transformation:</strong><br>
-                            d<sub>ij</sub> = √(2(1-ρ<sub>ij</sub>))
-                        </div>
-                    </div>
-                    
-                    <div class="theory-card">
-                        <h3>MST Algorithms</h3>
-                        <div class="algorithm-comparison">
-                            <div class="algorithm">
-                                <h4>Kruskal's Algorithm</h4>
-                                <p><strong>Approach:</strong> Edge-based, greedy selection</p>
-                                <p><strong>Time Complexity:</strong> O(E log E)</p>
-                                <p><strong>Data Structure:</strong> Union-Find</p>
-                                <p><strong>Best for:</strong> Sparse graphs</p>
-                            </div>
-                            <div class="algorithm">
-                                <h4>Prim's Algorithm</h4>
-                                <p><strong>Approach:</strong> Vertex-based, growing tree</p>
-                                <p><strong>Time Complexity:</strong> O(E log V)</p>
-                                <p><strong>Data Structure:</strong> Priority Queue</p>
-                                <p><strong>Best for:</strong> Dense graphs</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="theory-card">
-                        <h3>Network Centrality Measures</h3>
-                        <div class="centrality-measures">
-                            <div class="measure">
-                                <h4>Degree Centrality</h4>
-                                <p>Number of direct connections to other assets</p>
-                            </div>
-                            <div class="measure">
-                                <h4>Betweenness Centrality</h4>
-                                <p>Measure of asset's role as intermediary in network</p>
-                            </div>
-                            <div class="measure">
-                                <h4>Eigenvector Centrality</h4>
-                                <p>Importance based on connections to other important assets</p>
-                            </div>
-                        </div>
+            <div class="card" style="margin-top: 24px;">
+                <div class="card__body">
+                    <h3 style="margin-bottom: 16px;">Top 5 Most Central Stocks</h3>
+                    <div class="table-container">
+                        <table id="centralityTable" class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Stock</th>
+                                    <th>Degree</th>
+                                    <th>Betweenness</th>
+                                    <th>Eigenvector</th>
+                                    <th>Average</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Data & Methodology -->
-        <section id="methodology" class="section">
-            <div class="container">
-                <h1>Data & Methodology</h1>
-                
-                <div class="methodology-grid">
-                    <div class="data-card">
-                        <h3>Stock Universe</h3>
-                        <div class="stock-grid" id="stock-universe">
-                            <!-- Will be populated by JavaScript -->
-                        </div>
-                    </div>
-                    
-                    <div class="process-card">
-                        <h3>Implementation Process</h3>
-                        <div class="process-steps">
-                            <div class="step">
-                                <div class="step-number">1</div>
-                                <div class="step-content">
-                                    <h4>Data Collection</h4>
-                                    <p>Historical returns for 25 stocks across 5 sectors</p>
-                                </div>
-                            </div>
-                            <div class="step">
-                                <div class="step-number">2</div>
-                                <div class="step-content">
-                                    <h4>Correlation Matrix</h4>
-                                    <p>Calculate pairwise correlations using Pearson coefficient</p>
-                                </div>
-                            </div>
-                            <div class="step">
-                                <div class="step-number">3</div>
-                                <div class="step-content">
-                                    <h4>Distance Transformation</h4>
-                                    <p>Convert correlations to distances: d = √(2(1-ρ))</p>
-                                </div>
-                            </div>
-                            <div class="step">
-                                <div class="step-number">4</div>
-                                <div class="step-content">
-                                    <h4>MST Construction</h4>
-                                    <p>Apply Kruskal's algorithm with Union-Find structure</p>
-                                </div>
-                            </div>
-                            <div class="step">
-                                <div class="step-number">5</div>
-                                <div class="step-content">
-                                    <h4>Portfolio Optimization</h4>
-                                    <p>Use centrality measures for weight allocation</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+    <!-- Portfolio Comparison Section -->
+    <section id="portfolio" class="section">
+        <div class="container">
+            <h2 class="section-title">Portfolio Strategy Comparison</h2>
+            <p class="section-description">
+                Comparison of three portfolio construction strategies: Inverse Centrality (favoring peripheral stocks),
+                MST Diversification (balanced network approach), and Equal Weight (benchmark).
+            </p>
 
-        <!-- MST Network Visualization -->
-        <section id="visualization" class="section">
-            <div class="container">
-                <h1>MST Network Visualization</h1>
-                
-                <div class="visualization-grid">
-                    <div class="network-container">
-                        <h3>Minimum Spanning Tree Structure</h3>
+            <div class="card">
+                <div class="card__body">
+                    <h3 style="margin-bottom: 16px;">Performance Metrics Comparison</h3>
+                    <div class="chart-grid">
                         <div class="chart-wrapper">
-                            <img src="https://ppl-ai-code-interpreter-files.s3.amazonaws.com/web/direct-files/4949fe127f4148c03086c57a2d9d8543/4bdde6bc-2c5b-467b-81eb-47d283402b8d/2c5673b4.png" alt="MST Network Visualization" class="network-image">
+                            <canvas id="returnChart"></canvas>
                         </div>
-                        <div class="network-stats">
-                            <div class="stat">
-                                <span class="stat-label">Total Edges:</span>
-                                <span class="stat-value">24</span>
-                            </div>
-                            <div class="stat">
-                                <span class="stat-label">Intra-sector:</span>
-                                <span class="stat-value">20</span>
-                            </div>
-                            <div class="stat">
-                                <span class="stat-label">Cross-sector:</span>
-                                <span class="stat-value">4</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="centrality-container">
-                        <h3>Centrality Analysis</h3>
                         <div class="chart-wrapper">
-                            <img src="https://ppl-ai-code-interpreter-files.s3.amazonaws.com/web/direct-files/4949fe127f4148c03086c57a2d9d8543/28f2d765-87b4-4604-9d93-1beb4d55b476/2c5673b4.png" alt="Centrality Measures" class="centrality-image">
+                            <canvas id="volatilityChart"></canvas>
                         </div>
-                        
-                        <div class="connections-table">
-                            <h4>Strongest Connections</h4>
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th>Stock Pair</th>
-                                        <th>Correlation</th>
-                                        <th>Distance</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="strongest-connections">
-                                    <!-- Populated by JavaScript -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Portfolio Results -->
-        <section id="results" class="section">
-            <div class="container">
-                <h1>Portfolio Optimization Results</h1>
-                
-                <div class="results-grid">
-                    <div class="performance-chart-container">
-                        <h3>Performance Comparison</h3>
                         <div class="chart-wrapper">
-                            <img src="https://ppl-ai-code-interpreter-files.s3.amazonaws.com/web/direct-files/4949fe127f4148c03086c57a2d9d8543/82d2b749-f381-4cf4-ad0f-376e8c04b4fb/7af248b1.png" alt="Portfolio Performance Comparison" class="performance-image">
+                            <canvas id="sharpeChart"></canvas>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="drawdownChart"></canvas>
                         </div>
                     </div>
-                    
-                    <div class="portfolio-tabs">
-                        <div class="tab-buttons">
-                            <button class="tab-btn active" data-portfolio="inverse">Inverse Centrality</button>
-                            <button class="tab-btn" data-portfolio="mst">MST Diversification</button>
-                            <button class="tab-btn" data-portfolio="equal">Equal Weight</button>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 24px;">
+                <div class="card__body">
+                    <h3 style="margin-bottom: 16px;">Investment Calculator</h3>
+                    <div class="investment-calculator">
+                        <div class="calc-input-group">
+                            <label class="control-label">Investment Amount (₹):</label>
+                            <div class="amount-buttons">
+                                <button class="btn btn--outline btn--sm" onclick="setInvestment(10000)">₹10,000</button>
+                                <button class="btn btn--outline btn--sm" onclick="setInvestment(50000)">₹50,000</button>
+                                <button class="btn btn--outline btn--sm" onclick="setInvestment(100000)">₹1,00,000</button>
+                                <button class="btn btn--outline btn--sm" onclick="setInvestment(500000)">₹5,00,000</button>
+                            </div>
+                            <input type="number" id="investmentAmount" class="form-control" placeholder="Enter custom amount" value="100000" min="1000" step="1000">
                         </div>
+                        <div class="calc-input-group">
+                            <label class="control-label">Select Strategy:</label>
+                            <select id="strategySelect" class="form-control">
+                                <option value="inverse">Inverse Centrality</option>
+                                <option value="mst">MST Diversification</option>
+                                <option value="equal">Equal Weight</option>
+                            </select>
+                        </div>
+                        <button class="btn btn--primary" onclick="calculatePortfolio()">Calculate Portfolio</button>
+                        <button class="btn btn--secondary" onclick="downloadPortfolio()">Download as CSV</button>
+                    </div>
+                    <div id="portfolioResults" class="portfolio-results" style="display: none;"></div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 24px;">
+                <div class="card__body">
+                    <h3 style="margin-bottom: 16px;">Portfolio Allocations</h3>
+                    <div class="allocation-grid">
+                        <div class="allocation-item">
+                            <h4>Inverse Centrality</h4>
+                            <div class="pie-container">
+                                <canvas id="pieInverse"></canvas>
+                            </div>
+                        </div>
+                        <div class="allocation-item">
+                            <h4>MST Diversification</h4>
+                            <div class="pie-container">
+                                <canvas id="pieMST"></canvas>
+                            </div>
+                        </div>
+                        <div class="allocation-item">
+                            <h4>Equal Weight</h4>
+                            <div class="pie-container">
+                                <canvas id="pieEqual"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 24px;">
+                <div class="card__body">
+                    <h3 style="margin-bottom: 16px;">Summary Statistics</h3>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Strategy</th>
+                                    <th>Annual Return</th>
+                                    <th>Annualized Volatility</th>
+                                    <th>Sharpe Ratio</th>
+                                    <th>Max Drawdown</th>
+                                </tr>
+                            </thead>
+                            <tbody id="performanceTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Methodology Section -->
+    <section id="methodology" class="section">
+        <div class="container">
+            <h2 class="section-title">Methodology</h2>
+            <p class="section-description">
+                Mathematical foundation and algorithmic approach for MST-based portfolio construction.
+            </p>
+
+            <div class="methodology-content">
+                <div class="card">
+                    <div class="card__body">
+                        <h3>1. MST Construction Process</h3>
+                        <p>The Minimum Spanning Tree is constructed from stock correlations using the following steps:</p>
+                        <ol class="methodology-list">
+                            <li>Compute pairwise correlations ρ<sub>ij</sub> between all stocks</li>
+                            <li>Convert correlations to distances: d<sub>ij</sub> = √(2(1 - ρ<sub>ij</sub>))</li>
+                            <li>Apply Kruskal's or Prim's algorithm to find the MST</li>
+                            <li>Result: A tree connecting all stocks with minimum total distance</li>
+                        </ol>
+                        <div class="formula-box">
+                            <strong>Distance Metric:</strong><br>
+                            d<sub>ij</sub> = √(2(1 - ρ<sub>ij</sub>))<br>
+                            where ρ<sub>ij</sub> ∈ [-1, 1] is the correlation coefficient
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card__body">
+                        <h3>2. Centrality Measures</h3>
                         
-                        <div class="tab-content">
-                            <div id="inverse-tab" class="tab-panel active">
-                                <div class="portfolio-metrics">
-                                    <div class="metric">
-                                        <span class="metric-label">Annual Return</span>
-                                        <span class="metric-value">38.71%</span>
-                                    </div>
-                                    <div class="metric">
-                                        <span class="metric-label">Volatility</span>
-                                        <span class="metric-value">24.99%</span>
-                                    </div>
-                                    <div class="metric">
-                                        <span class="metric-label">Sharpe Ratio</span>
-                                        <span class="metric-value">1.55</span>
-                                    </div>
-                                    <div class="metric">
-                                        <span class="metric-label">Max Drawdown</span>
-                                        <span class="metric-value">-19.66%</span>
-                                    </div>
-                                </div>
-                                <div class="top-holdings">
-                                    <h4>Top Holdings</h4>
-                                    <div id="inverse-holdings" class="holdings-list">
-                                        <!-- Populated by JavaScript -->
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div id="mst-tab" class="tab-panel">
-                                <div class="portfolio-metrics">
-                                    <div class="metric">
-                                        <span class="metric-label">Annual Return</span>
-                                        <span class="metric-value">39.04%</span>
-                                    </div>
-                                    <div class="metric">
-                                        <span class="metric-label">Volatility</span>
-                                        <span class="metric-value">24.99%</span>
-                                    </div>
-                                    <div class="metric">
-                                        <span class="metric-label">Sharpe Ratio</span>
-                                        <span class="metric-value">1.56</span>
-                                    </div>
-                                    <div class="metric">
-                                        <span class="metric-label">Max Drawdown</span>
-                                        <span class="metric-value">-19.60%</span>
-                                    </div>
-                                </div>
-                                <div class="top-holdings">
-                                    <h4>Top Holdings</h4>
-                                    <div id="mst-holdings" class="holdings-list">
-                                        <!-- Populated by JavaScript -->
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div id="equal-tab" class="tab-panel">
-                                <div class="portfolio-metrics">
-                                    <div class="metric">
-                                        <span class="metric-label">Annual Return</span>
-                                        <span class="metric-value">40.63%</span>
-                                    </div>
-                                    <div class="metric">
-                                        <span class="metric-label">Volatility</span>
-                                        <span class="metric-value">25.99%</span>
-                                    </div>
-                                    <div class="metric">
-                                        <span class="metric-label">Sharpe Ratio</span>
-                                        <span class="metric-value">1.56</span>
-                                    </div>
-                                    <div class="metric">
-                                        <span class="metric-label">Max Drawdown</span>
-                                        <span class="metric-value">-19.83%</span>
-                                    </div>
-                                </div>
-                                <div class="top-holdings">
-                                    <h4>Top Holdings</h4>
-                                    <div id="equal-holdings" class="holdings-list">
-                                        <!-- Populated by JavaScript -->
-                                    </div>
-                                </div>
-                            </div>
+                        <h4>Degree Centrality</h4>
+                        <p>Measures the number of direct connections a node has:</p>
+                        <div class="formula-box">
+                            C<sub>D</sub>(v) = deg(v) / (n - 1)
                         </div>
+                        <p>where deg(v) is the degree of node v and n is the total number of nodes.</p>
+
+                        <h4>Betweenness Centrality</h4>
+                        <p>Quantifies how often a node appears on shortest paths between other nodes:</p>
+                        <div class="formula-box">
+                            C<sub>B</sub>(v) = Σ<sub>s≠v≠t</sub> (σ<sub>st</sub>(v) / σ<sub>st</sub>)
+                        </div>
+                        <p>where σ<sub>st</sub> is the number of shortest paths from s to t, and σ<sub>st</sub>(v) is the number passing through v.</p>
+
+                        <h4>Eigenvector Centrality</h4>
+                        <p>Measures influence based on connections to other influential nodes:</p>
+                        <div class="formula-box">
+                            C<sub>E</sub>(v) = (1/λ) Σ<sub>u∈N(v)</sub> C<sub>E</sub>(u)
+                        </div>
+                        <p>where λ is the largest eigenvalue of the adjacency matrix and N(v) are neighbors of v.</p>
                     </div>
                 </div>
-            </div>
-        </section>
 
-        <!-- Algorithm Implementation -->
-        <section id="implementation" class="section">
-            <div class="container">
-                <h1>Algorithm Implementation</h1>
-                
-                <div class="implementation-grid">
-                    <div class="algorithm-card">
-                        <h3>Data Structures Used</h3>
-                        <div class="dsa-list">
-                            <div class="dsa-item">
-                                <h4>Graph Representation</h4>
-                                <p>Adjacency matrix and edge list for correlation data</p>
-                                <div class="complexity">Space: O(V²)</div>
-                            </div>
-                            <div class="dsa-item">
-                                <h4>Union-Find (Disjoint Set)</h4>
-                                <p>Path compression and union by rank optimization</p>
-                                <div class="complexity">Time: O(α(n)) amortized</div>
-                            </div>
-                            <div class="dsa-item">
-                                <h4>Priority Queue</h4>
-                                <p>Min-heap for Prim's algorithm edge selection</p>
-                                <div class="complexity">Operations: O(log V)</div>
-                            </div>
-                            <div class="dsa-item">
-                                <h4>Sorting Algorithm</h4>
-                                <p>Edge sorting for Kruskal's algorithm</p>
-                                <div class="complexity">Time: O(E log E)</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="pseudocode-card">
-                        <h3>Kruskal's Algorithm Pseudocode</h3>
-                        <pre class="code-block">
-<code>function kruskalsAlgorithm(graph):
-    mst = []
-    unionFind = UnionFind(graph.vertices)
-    
-    // Sort edges by weight (distance)
-    edges = sortByWeight(graph.edges)
-    
-    for edge in edges:
-        u, v, weight = edge
-        
-        // Check if adding edge creates cycle
-        if unionFind.find(u) != unionFind.find(v):
-            mst.append(edge)
-            unionFind.union(u, v)
-            
-            // Stop when MST is complete
-            if len(mst) == graph.vertices - 1:
-                break
-    
-    return mst</code>
-                        </pre>
-                    </div>
-                    
-                    <div class="complexity-card">
-                        <h3>Time Complexity Analysis</h3>
-                        <div class="complexity-table">
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th>Algorithm</th>
-                                        <th>Time Complexity</th>
-                                        <th>Space Complexity</th>
-                                        <th>Best Case</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Kruskal's</td>
-                                        <td>O(E log E)</td>
-                                        <td>O(V + E)</td>
-                                        <td>Sparse graphs</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Prim's</td>
-                                        <td>O(E log V)</td>
-                                        <td>O(V)</td>
-                                        <td>Dense graphs</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Results & Analysis -->
-        <section id="analysis" class="section">
-            <div class="container">
-                <h1>Results & Analysis</h1>
-                
-                <div class="analysis-grid">
-                    <div class="insights-card">
-                        <h3>Key Findings</h3>
-                        <div class="findings-list">
-                            <div class="finding">
-                                <h4>Network Structure Insights</h4>
-                                <p>The MST reveals strong intra-sector clustering with 83% of connections within sectors, indicating that correlation-based distance effectively captures sector relationships.</p>
-                            </div>
-                            <div class="finding">
-                                <h4>Centrality-Based Optimization</h4>
-                                <p>GOOGL emerges as the most central node with highest betweenness centrality (0.76), suggesting its critical role in the financial network structure.</p>
-                            </div>
-                            <div class="finding">
-                                <h4>Portfolio Performance</h4>
-                                <p>MST diversification method achieves the highest Sharpe ratio (1.56) with minimal difference in volatility compared to other methods.</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="sector-analysis-card">
-                        <h3>Sector Allocation Analysis</h3>
-                        <div class="sector-breakdown">
-                            <div class="sector-item">
-                                <span class="sector-name">Technology</span>
-                                <div class="sector-bar">
-                                    <div class="sector-fill" style="width: 20%" data-sector="tech"></div>
-                                </div>
-                                <span class="sector-percent">20%</span>
-                            </div>
-                            <div class="sector-item">
-                                <span class="sector-name">Financial</span>
-                                <div class="sector-bar">
-                                    <div class="sector-fill" style="width: 20%" data-sector="finance"></div>
-                                </div>
-                                <span class="sector-percent">20%</span>
-                            </div>
-                            <div class="sector-item">
-                                <span class="sector-name">Healthcare</span>
-                                <div class="sector-bar">
-                                    <div class="sector-fill" style="width: 20%" data-sector="health"></div>
-                                </div>
-                                <span class="sector-percent">20%</span>
-                            </div>
-                            <div class="sector-item">
-                                <span class="sector-name">Energy</span>
-                                <div class="sector-bar">
-                                    <div class="sector-fill" style="width: 20%" data-sector="energy"></div>
-                                </div>
-                                <span class="sector-percent">20%</span>
-                            </div>
-                            <div class="sector-item">
-                                <span class="sector-name">Consumer</span>
-                                <div class="sector-bar">
-                                    <div class="sector-fill" style="width: 20%" data-sector="consumer"></div>
-                                </div>
-                                <span class="sector-percent">20%</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="risk-return-card">
-                        <h3>Risk-Return Analysis</h3>
-                        <div class="risk-metrics">
-                            <div class="metric-comparison">
-                                <h4>Sharpe Ratio Ranking</h4>
-                                <ol class="ranking-list">
-                                    <li>Equal Weight: 1.5631</li>
-                                    <li>MST Diversification: 1.5621</li>
-                                    <li>Inverse Centrality: 1.5488</li>
-                                </ol>
-                            </div>
-                            <div class="metric-comparison">
-                                <h4>Maximum Drawdown</h4>
-                                <ol class="ranking-list">
-                                    <li>MST Diversification: -19.60%</li>
-                                    <li>Inverse Centrality: -19.66%</li>
-                                    <li>Equal Weight: -19.83%</li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Conclusion -->
-        <section id="conclusion" class="section">
-            <div class="container">
-                <h1>Conclusion & Applications</h1>
-                
-                <div class="conclusion-grid">
-                    <div class="summary-card">
-                        <h3>Research Summary</h3>
-                        <p>This project successfully demonstrates the application of advanced data structures and algorithms in financial portfolio optimization. The MST-based approach provides valuable insights into asset correlation structures and offers a systematic framework for portfolio construction.</p>
+                <div class="card">
+                    <div class="card__body">
+                        <h3>3. Portfolio Weighting Schemes</h3>
                         
-                        <h4>Technical Contributions</h4>
-                        <ul>
-                            <li>Efficient implementation of Kruskal's algorithm with Union-Find optimization</li>
-                            <li>Network analysis using centrality measures for weight allocation</li>
-                            <li>Comparative analysis of different MST-based optimization strategies</li>
-                            <li>Integration of graph theory concepts with modern portfolio theory</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="applications-card">
-                        <h3>Practical Applications</h3>
-                        <div class="application-list">
-                            <div class="application">
-                                <h4>Risk Management</h4>
-                                <p>MST visualization helps identify concentration risks and correlation clusters for better diversification strategies.</p>
-                            </div>
-                            <div class="application">
-                                <h4>Asset Selection</h4>
-                                <p>Centrality measures guide systematic asset screening and identification of redundant positions.</p>
-                            </div>
-                            <div class="application">
-                                <h4>Dynamic Rebalancing</h4>
-                                <p>Network structure analysis enables tactical allocation adjustments based on evolving correlation patterns.</p>
-                            </div>
-                            <div class="application">
-                                <h4>Systemic Risk Assessment</h4>
-                                <p>Betweenness centrality identifies systemically important assets that could propagate market shocks.</p>
-                            </div>
+                        <h4>Inverse Centrality Portfolio</h4>
+                        <p>Assigns higher weights to peripheral stocks with lower centrality:</p>
+                        <div class="formula-box">
+                            w<sub>i</sub> = (1/C<sub>i</sub>) / Σ<sub>j</sub>(1/C<sub>j</sub>)
                         </div>
-                    </div>
-                    
-                    <div class="limitations-card">
-                        <h3>Limitations & Future Work</h3>
-                        <div class="limitations">
-                            <h4>Current Limitations</h4>
-                            <ul>
-                                <li>Historical correlation dependency</li>
-                                <li>Static network structure assumption</li>
-                                <li>Limited to pairwise relationships</li>
-                            </ul>
-                            
-                            <h4>Future Research Directions</h4>
-                            <ul>
-                                <li>Dynamic MST construction for time-varying correlations</li>
-                                <li>Integration with machine learning for correlation prediction</li>
-                                <li>Extension to higher-order network relationships</li>
-                                <li>Real-time portfolio optimization algorithms</li>
-                            </ul>
+                        <p>where C<sub>i</sub> is the average normalized centrality of stock i.</p>
+
+                        <h4>MST Diversification Portfolio</h4>
+                        <p>Balances centrality and network position for optimal diversification:</p>
+                        <div class="formula-box">
+                            w<sub>i</sub> = f(d<sub>i</sub>, C<sub>i</sub>) / Σ<sub>j</sub> f(d<sub>j</sub>, C<sub>j</sub>)
                         </div>
+                        <p>where d<sub>i</sub> is the average edge distance and f combines multiple factors.</p>
+
+                        <h4>Equal Weight Portfolio (Benchmark)</h4>
+                        <p>Simple benchmark strategy with equal allocation:</p>
+                        <div class="formula-box">
+                            w<sub>i</sub> = 1/n
+                        </div>
+                        <p>where n is the number of stocks in the portfolio.</p>
                     </div>
                 </div>
-                
-                <div class="acknowledgments">
-                    <h3>Acknowledgments</h3>
-                    <p>This research project demonstrates the successful application of advanced data structures and algorithms in financial engineering, combining theoretical computer science concepts with practical portfolio management applications.</p>
+
+                <div class="card">
+                    <div class="card__body">
+                        <h3>4. Performance Evaluation</h3>
+                        
+                        <h4>Sharpe Ratio</h4>
+                        <div class="formula-box">
+                            SR = (R<sub>p</sub> - R<sub>f</sub>) / σ<sub>p</sub>
+                        </div>
+                        <p>where R<sub>p</sub> is portfolio return, R<sub>f</sub> is risk-free rate, and σ<sub>p</sub> is portfolio volatility.</p>
+
+                        <h4>Maximum Drawdown</h4>
+                        <div class="formula-box">
+                            MDD = max<sub>t</sub>[(max<sub>τ≤t</sub> V<sub>τ</sub> - V<sub>t</sub>) / max<sub>τ≤t</sub> V<sub>τ</sub>]
+                        </div>
+                        <p>where V<sub>t</sub> is the portfolio value at time t.</p>
+                    </div>
                 </div>
             </div>
-        </section>
-    </main>
+        </div>
+    </section>
 
     <script src="app.js"></script>
 </body>
